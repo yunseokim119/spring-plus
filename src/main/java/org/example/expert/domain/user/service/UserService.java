@@ -3,6 +3,7 @@ package org.example.expert.domain.user.service;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.config.PasswordEncoder;
 import org.example.expert.domain.common.exception.InvalidRequestException;
+import org.example.expert.domain.user.dto.request.UserChangeNicknameRequest;
 import org.example.expert.domain.user.dto.request.UserChangePasswordRequest;
 import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.entity.User;
@@ -20,7 +21,7 @@ public class UserService {
 
     public UserResponse getUser(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new InvalidRequestException("User not found"));
-        return new UserResponse(user.getId(), user.getEmail());
+        return new UserResponse(user.getId(), user.getEmail(), user.getNickname());
     }
 
     @Transactional
@@ -39,6 +40,15 @@ public class UserService {
         }
 
         user.changePassword(passwordEncoder.encode(userChangePasswordRequest.getNewPassword()));
+    }
+
+    @Transactional
+    public void changeNickname(long userId, UserChangeNicknameRequest userChangeNicknameRequest) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new InvalidRequestException("User not found"));
+
+        user.updateNickname(userChangeNicknameRequest.getNewNickname()); // 닉네임 업데이트
+        userRepository.save(user); // 변경된 엔티티 저장
     }
 
     private static void validateNewPassword(UserChangePasswordRequest userChangePasswordRequest) {
