@@ -27,17 +27,19 @@ public class Todo extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @OneToMany(mappedBy = "todo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Manager> managers = new ArrayList<>();
+
     @OneToMany(mappedBy = "todo", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "todo")
-    private List<Manager> managers = new ArrayList<>();
 
     public Todo(String title, String contents, String weather, User user) {
         this.title = title;
         this.contents = contents;
         this.weather = weather;
         this.user = user;
-        this.managers.add(new Manager(user, this));
+        // 할 일을 생성한 유저를 자동으로 담당자로 등록
+        Manager manager = new Manager(user, this);
+        this.managers.add(manager);
     }
 }
