@@ -2,6 +2,7 @@ package org.example.expert.domain.todo.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.expert.client.dto.WeatherDto;
 import org.example.expert.domain.common.annotation.Auth;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
@@ -31,13 +32,13 @@ public class TodoController {
 
     @GetMapping("/todos")
     public ResponseEntity<Page<TodoResponse>> getTodos(
-            @RequestParam(required = false) String weather,
+            @RequestParam(required = false) WeatherDto weatherDto,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return ResponseEntity.ok(todoService.getTodos(weather, startDate, endDate, page, size));
+        return ResponseEntity.ok(todoService.getTodos(weatherDto, startDate, endDate, page, size));
     }
 
     @GetMapping("/todos/{todoId}")
