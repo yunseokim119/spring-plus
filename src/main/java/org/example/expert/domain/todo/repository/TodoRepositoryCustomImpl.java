@@ -54,7 +54,7 @@ public class TodoRepositoryCustomImpl implements TodoRepositoryCustom {
                 .where(
                         titleContains(condition.getKeyword()),
                         createdAtBetween(condition.getStartDate(), condition.getEndDate()),
-                        assigneeNicknameContains(condition.getAssigneeNickname())
+                        assignedNicknameContains(condition.getAssignedNickname())
                 )
                 .groupBy(todo.id) // 중복 제거를 위한 그룹화
                 .orderBy(todo.createdAt.desc()) // 생성일 기준 내림차순 정렬
@@ -70,7 +70,7 @@ public class TodoRepositoryCustomImpl implements TodoRepositoryCustom {
                 .where(
                         titleContains(condition.getKeyword()),
                         createdAtBetween(condition.getStartDate(), condition.getEndDate()),
-                        assigneeNicknameContains(condition.getAssigneeNickname())
+                        assignedNicknameContains(condition.getAssignedNickname())
                 );
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -92,7 +92,7 @@ public class TodoRepositoryCustomImpl implements TodoRepositoryCustom {
         return null;
     }
     // 담당자 닉네임 검색 필터
-    private BooleanExpression assigneeNicknameContains(String nickname) {
+    private BooleanExpression assignedNicknameContains(String nickname) {
         return nickname != null ? user.nickname.containsIgnoreCase(nickname) : null;
     }
 }

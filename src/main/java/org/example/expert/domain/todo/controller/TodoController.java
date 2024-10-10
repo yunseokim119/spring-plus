@@ -55,11 +55,11 @@ public class TodoController {
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestParam(required = false) String assigneeNickname,
+            @RequestParam(required = false) String assignedNickname,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ){
-        TodoSearchRequest condition = new TodoSearchRequest(keyword, startDate, endDate, assigneeNickname);
+        TodoSearchRequest condition = new TodoSearchRequest(keyword, startDate, endDate, assignedNickname);
         Page<TodoSearchResponse> results = todoService.searchTodos(condition, page, size);
         return ResponseEntity.ok(results);
     }
